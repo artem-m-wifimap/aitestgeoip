@@ -11,9 +11,9 @@ gem 'sinatra-contrib'
 gem 'thin', '~> 1.8.2'
 
 group :development, :test do
+  gem 'bundle-audit', require: false
   gem 'rack-test'
   gem 'rspec'
   gem 'rubocop', require: false
   gem 'rubocop-rspec', require: false
-  gem 'bundle-audit', require: false
 end
