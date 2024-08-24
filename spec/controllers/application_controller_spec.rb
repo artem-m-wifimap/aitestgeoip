@@ -6,7 +6,8 @@ RSpec.describe ApplicationController do
   describe 'GET /geoip' do
     context 'when IP is provided' do
       let(:ip) { '8.8.8.8' }
-      let(:geoip_result) do
+      let(:geoip_result) { instance_double(MaxMindDB::Result) }
+      let(:decorated_result) do
         {
           ip: ip,
           country: 'United States',
@@ -21,6 +22,9 @@ RSpec.describe ApplicationController do
 
       before do
         allow(GeoIPService).to receive(:lookup).with(ip).and_return(geoip_result)
+        allow(GeoIPResultDecorator).to receive(:new).with(ip, geoip_result).and_return(
+          instance_double(GeoIPResultDecorator, decorate: decorated_result)
+        )
       end
 
       it 'returns a successful response for the provided IP' do
@@ -30,13 +34,14 @@ RSpec.describe ApplicationController do
 
       it 'returns correct geolocation data for the provided IP' do
         get "/geoip?ip=#{ip}"
-        expect(JSON.parse(last_response.body)).to eq(geoip_result.transform_keys(&:to_s))
+        expect(JSON.parse(last_response.body)).to eq(decorated_result.transform_keys(&:to_s))
       end
     end
 
     context 'when IP is not provided' do
       let(:request_ip) { '127.0.0.1' }
-      let(:geoip_result) do
+      let(:geoip_result) { instance_double(MaxMindDB::Result) }
+      let(:decorated_result) do
         {
           ip: request_ip,
           country: 'United States',
@@ -48,9 +53,14 @@ RSpec.describe ApplicationController do
           time_zone: 'America/New_York'
         }
       end
+      let(:app) { described_class.new! }
 
       before do
+        allow(app).to receive(:request_ip).and_return(request_ip)
         allow(GeoIPService).to receive(:lookup).with(request_ip).and_return(geoip_result)
+        allow(GeoIPResultDecorator).to receive(:new).with(request_ip, geoip_result).and_return(
+          instance_double(GeoIPResultDecorator, decorate: decorated_result)
+        )
       end
 
       it 'returns a successful response for the request IP' do
@@ -60,7 +70,7 @@ RSpec.describe ApplicationController do
 
       it 'returns correct geolocation data for the request IP' do
         get '/geoip'
-        expect(JSON.parse(last_response.body)).to eq(geoip_result.transform_keys(&:to_s))
+        expect(JSON.parse(last_response.body)).to eq(decorated_result.transform_keys(&:to_s))
       end
     end
 

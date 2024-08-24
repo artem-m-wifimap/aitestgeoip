@@ -4,6 +4,7 @@ require 'sinatra/base'
 require 'sinatra/json'
 require_relative '../helpers/ip_helper'
 require_relative '../errors/geoip_error'
+require_relative '../decorators/geoip_result_decorator'
 
 class ApplicationController < Sinatra::Base
   include IPHelper
@@ -35,6 +36,7 @@ class ApplicationController < Sinatra::Base
   get '/geoip' do
     ip = params['ip'] || request_ip
     result = GeoIPService.lookup(ip)
-    json result
+    decorated_result = GeoIPResultDecorator.new(ip, result).decorate
+    json decorated_result
   end
 end

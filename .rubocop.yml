@@ -23,3 +23,12 @@ Style/SymbolArray:
 
 Style/WordArray:
   EnforcedStyle: brackets
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Max: 10
