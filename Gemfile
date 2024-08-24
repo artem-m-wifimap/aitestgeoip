@@ -15,4 +15,5 @@ group :development, :test do
   gem 'rspec'
   gem 'rubocop', require: false
   gem 'rubocop-rspec', require: false
+  gem 'bundle-audit', require: false
 end

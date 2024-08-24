@@ -4,8 +4,8 @@
 start:
 	bundle exec dotenv thin start -p 4567
 
-# Run CI tasks (tests and linting)
-ci: test lint
+# Run CI tasks (tests, linting, and dependency checks)
+ci: test lint check-deps
 
 # Run tests
 test:
@@ -14,6 +14,10 @@ test:
 # Run linter
 lint:
 	bundle exec rubocop
+
+# Check for vulnerable dependencies
+check-deps:
+	bundle exec bundle-audit check --update
 
 # Download the latest MaxMind GeoLite2 database
 download-db:

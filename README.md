@@ -23,11 +23,19 @@ This is a simple Sinatra-based web service that provides GeoIP lookup functional
    This command will install dependencies and download the GeoLite2 database.
 
 3. Set up the environment:
-   - Create a `.env` file in the project root with the following content:
+   - Copy the `.env.example` file to `.env`:
      ```
-     GEOIP_DB_PATH=./app/bin/GeoLite2-City.mmdb
+     cp .env.example .env
+     ```
+   - Open the `.env` file and adjust the values if needed:
+     ```
      RACK_ENV=development
+     GEOIP_DB_PATH=./app/bin/GeoLite2-City.mmdb
      ```
+     - `RACK_ENV`: Set to `development` for local development, `test` for running tests, or `production` for production environment.
+     - `GEOIP_DB_PATH`: Path to the GeoLite2 City database file. The default path is set to `./app/bin/GeoLite2-City.mmdb`.
+
+4. (Optional) If you want to use a different path for the GeoLite2 database, update the `GEOIP_DB_PATH` in your `.env` file and ensure the database file is present at that location.
 
 ## Running the Application
 
@@ -67,10 +75,19 @@ make lint
 
 ### CI Tasks
 
-To run all CI tasks (tests and linting):
+To run all CI tasks (tests, linting, and dependency checks):
 ```
 make ci
 ```
+
+### Checking Dependencies
+
+To check for outdated or vulnerable dependencies:
+```
+bundle exec bundle-audit check --update
+```
+
+This command will update the Ruby Advisory Database and check your dependencies against it.
 
 ### Updating the GeoLite2 Database
 
@@ -84,12 +101,13 @@ make download-db
 The project includes a Makefile with the following commands:
 
 - `make start`: Starts the application
-- `make ci`: Runs all CI tasks (tests and linting)
+- `make ci`: Runs all CI tasks (tests, linting, and dependency checks)
 - `make test`: Runs the test suite
 - `make lint`: Runs the linter (RuboCop)
 - `make download-db`: Downloads the latest MaxMind GeoLite2 database
 - `make install`: Installs project dependencies
 - `make setup`: Sets up the project (installs dependencies and downloads the database)
+- `make check-deps`: Checks for outdated or vulnerable dependencies
 
 ## License
 

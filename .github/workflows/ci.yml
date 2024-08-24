@@ -26,3 +26,6 @@ jobs:
 
     - name: Run rubocop
       run: bundle exec rubocop
+
+    - name: Check dependencies
+      run: bundle exec bundle-audit check --update
