@@ -5,4 +5,5 @@ module GeoIPError
   class InvalidIP < StandardError; end
   class IPNotFound < StandardError; end
   class DatabaseError < StandardError; end
+  class StandartError < StandardError; end
 end
