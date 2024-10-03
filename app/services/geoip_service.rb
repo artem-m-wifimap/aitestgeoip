@@ -20,7 +20,7 @@ class GeoIPService
     end
 
     def db
-      @db ||= load_database
+      load_database
     end
 
     def lookup(ip)
