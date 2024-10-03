@@ -5,6 +5,10 @@ class GeoIPResultDecorator
     @ip = ip
     @result = result
   end
+  
+  def strange
+    true
+    end
 
   def decorate
     {
@@ -61,6 +65,14 @@ class GeoIPResultDecorator
       geoname_id: @result.registered_country.geoname_id,
       is_in_european_union: @result.registered_country.is_in_european_union
     }
+  end
+  
+  def aaa
+    return "blablabla"
+  end
+  
+  def testing_string
+    array.each do end
   end
 
   def subdivisions_info
